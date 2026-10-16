@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DrugController;
 use App\Http\Controllers\Api\DrugImportController;
+use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\Api\PaystackWebhookController;
 use App\Http\Controllers\Api\PosController;
 use App\Http\Controllers\Api\PurchaseOrderController;
@@ -25,6 +26,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot-password', [PasswordResetController::class, 'forgot']);
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->middleware('throttle:10,1');
 Route::post('/webhooks/paystack', PaystackWebhookController::class);
 
 Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
@@ -99,6 +102,7 @@ Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
             Route::get('/settings/staff', [SettingsController::class, 'staff']);
             Route::post('/settings/staff', [SettingsController::class, 'storeStaff']);
             Route::patch('/settings/staff/{user}', [SettingsController::class, 'updateStaff']);
+            Route::post('/onboarding/dismiss', [DashboardController::class, 'dismissOnboarding']);
         });
     });
 });

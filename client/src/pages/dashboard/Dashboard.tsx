@@ -9,6 +9,7 @@ import { Card, CardHeader, EmptyState, PageHeader, StatCard } from "../../compon
 import { ErrorState } from "../../components/ui/ErrorState";
 import { Skeleton } from "../../components/ui/Spinner";
 import { Tabs } from "../../components/ui/Tabs";
+import { OnboardingChecklist } from "./OnboardingChecklist";
 import { useSession } from "../../context/auth";
 import { useDashboard } from "../../hooks/useData";
 import { formatDate, relativeDays, timeAgo } from "../../lib/dates";
@@ -52,6 +53,8 @@ export default function Dashboard() {
         </Card>
       ) : (
         <div className="space-y-6">
+          {d?.onboarding && <OnboardingChecklist data={d.onboarding} onDismissed={() => void mutate()} />}
+
           {/* Above the fold, no interaction (FR-6.1). */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {isLoading || !d ? (
@@ -123,7 +126,14 @@ export default function Dashboard() {
               }
             />
             <div className="px-3 pt-4 pb-2 sm:px-5">
-              {d ? (
+              {d && d.trend.every((p) => p.revenue === 0) ? (
+                <EmptyState
+                  icon={<TrendingUp />}
+                  title={range === "day" ? "No sales yet today" : "No sales in this period yet"}
+                  description="Revenue will chart here as soon as you make sales."
+                  className="py-10"
+                />
+              ) : d ? (
                 <RevenueChart
                   data={d.trend}
                   formatLabel={(l) =>

@@ -19,7 +19,7 @@ class Tenant extends Model
 
     protected $fillable = [
         'name', 'slug', 'address', 'phone', 'email', 'licence_number', 'logo_path',
-        'vat_rate', 'currency', 'receipt_footer', 'tier_config', 'plan', 'status', 'trial_ends_at',
+        'vat_rate', 'currency', 'receipt_footer', 'tier_config', 'plan', 'status', 'trial_ends_at', 'onboarding_dismissed_at',
     ];
 
     protected function casts(): array
@@ -28,6 +28,7 @@ class Tenant extends Model
             'vat_rate' => 'decimal:2',
             'tier_config' => 'array',
             'trial_ends_at' => 'datetime',
+            'onboarding_dismissed_at' => 'datetime',
         ];
     }
 

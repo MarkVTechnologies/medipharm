@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -125,6 +126,14 @@ class SettingsController extends Controller
         }
 
         $user->update($data);
+
+        // A password set by the owner (or a deactivation) ends every session
+        // that account has, and voids any pending email reset link.
+        if (isset($data['password']) || ($data['is_active'] ?? true) === false) {
+            $user->forceFill(['remember_token' => Str::random(60)])->saveQuietly();
+            DB::table('sessions')->where('user_id', $user->id)->delete();
+            DB::table('password_resets')->where('user_id', $user->id)->delete();
+        }
 
         return new UserResource($user);
     }

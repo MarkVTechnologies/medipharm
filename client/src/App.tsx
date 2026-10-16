@@ -7,6 +7,8 @@ import { PageLoader } from "./components/ui/Spinner";
 // Route-level code splitting keeps the initial bundle small (§9.2).
 const Login = lazy(() => import("./pages/auth/Login"));
 const Register = lazy(() => import("./pages/auth/Register"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
 const Pos = lazy(() => import("./pages/pharmacy/Pos"));
 const Inventory = lazy(() => import("./pages/pharmacy/Inventory"));
@@ -31,7 +33,10 @@ export default function App() {
         <Route element={<PublicOnlyRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
+        {/* Unguarded: an emailed reset link must work even if someone is signed in on this device. */}
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route element={<ProtectedRoute />}>
           {/* Receipt renders without the app chrome so it prints cleanly. */}

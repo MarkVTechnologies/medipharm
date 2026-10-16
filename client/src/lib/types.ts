@@ -245,6 +245,21 @@ export interface DashboardData {
     created_at: string;
   }[];
   generated_at: string;
+  onboarding: Onboarding | null;
+}
+
+export interface Onboarding {
+  steps: {
+    key: string;
+    title: string;
+    description: string;
+    done: boolean;
+    optional: boolean;
+    action: { label: string; to: string };
+  }[];
+  completed: number;
+  total: number;
+  complete: boolean;
 }
 
 export interface ReportData {

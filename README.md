@@ -47,6 +47,7 @@ DB_CONNECTION=mysql DB_DATABASE=medipharm_test php artisan test
 
 - API: `server/` lives outside `public_html`; point an `api.` subdomain's document root at `server/public`. Set `.env` from `.env.example`, run `php artisan migrate --force` and the config/route/view caches.
 - SPA: copy `client/.env.production.example` to `.env.production`, `npm run build`, upload the contents of `client/dist/` (including `.htaccess`) into `public_html/`.
+- Mail: password-reset links and stock digests are emailed, so fill in the `MAIL_*` SMTP settings (a cPanel mailbox works). Locally, mail is written to `server/storage/logs/` instead.
 - Cron (one entry, every minute): `php /home/<user>/medipharm-api/artisan schedule:run`
 
 ## Key design rules

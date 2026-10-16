@@ -27,6 +27,9 @@ export function StaffSettings() {
   const [f, setF] = useState({ name: "", email: "", role: "assistant" as Role, password: "" });
   const [error, setError] = useState<ApiError | null>(null);
   const [busy, setBusy] = useState(false);
+  const [resetting, setResetting] = useState<User | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [resetError, setResetError] = useState<string>();
 
   const invite = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +55,23 @@ export function StaffSettings() {
       void mutate();
     } catch (e) {
       toast.error(e instanceof ApiError ? (Object.values(e.errors)[0]?.[0] ?? e.message) : "Update failed");
+    }
+  };
+
+  const setPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetting) return;
+    setBusy(true);
+    setResetError(undefined);
+    try {
+      await api(`/api/settings/staff/${resetting.id}`, { method: "PATCH", body: { password: newPassword } });
+      toast.success(`New password set for ${resetting.name}. They've been signed out everywhere.`);
+      setResetting(null);
+      setNewPassword("");
+    } catch (err) {
+      setResetError(err instanceof ApiError ? (err.field("password") ?? err.message) : "Could not set the password");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -84,9 +104,14 @@ export function StaffSettings() {
               <Td>{u.is_active ? <Badge tone="success">Active</Badge> : <Badge>Deactivated</Badge>}</Td>
               <Td align="right">
                 {u.id !== me.id && (
-                  <Button size="sm" variant="ghost" onClick={() => void update(u, { is_active: !u.is_active })}>
-                    {u.is_active ? "Deactivate" : "Reactivate"}
-                  </Button>
+                  <div className="flex justify-end gap-1">
+                    <Button size="sm" variant="ghost" onClick={() => { setResetting(u); setNewPassword(""); setResetError(undefined); }}>
+                      Set password
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => void update(u, { is_active: !u.is_active })}>
+                      {u.is_active ? "Deactivate" : "Reactivate"}
+                    </Button>
+                  </div>
                 )}
               </Td>
             </Tr>
@@ -111,6 +136,24 @@ export function StaffSettings() {
           <div className="flex justify-end gap-2">
             <Button variant="secondary" onClick={() => setInviting(false)}>Cancel</Button>
             <Button type="submit" loading={busy}>Add staff</Button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        open={!!resetting}
+        onClose={() => setResetting(null)}
+        title={`Set a new password for ${resetting?.name ?? ""}`}
+        description="For staff who can't use the email reset. Tell them the new password in person; they can change it under My account."
+        size="sm"
+      >
+        <form onSubmit={setPassword} className="space-y-4">
+          <Field label="New password" hint="At least 8 characters" error={resetError}>
+            {(id) => <Input id={id} type="text" autoComplete="off" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />}
+          </Field>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => setResetting(null)}>Cancel</Button>
+            <Button type="submit" loading={busy} disabled={newPassword.length < 8}>Set password</Button>
           </div>
         </form>
       </Modal>

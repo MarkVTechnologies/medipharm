@@ -77,6 +77,11 @@ export default function Login() {
             />
           )}
         </Field>
+        <div className="-mt-2 flex justify-end">
+          <Link to="/forgot-password" className="text-sm font-medium text-brand-600 hover:underline">
+            Forgot password?
+          </Link>
+        </div>
         {pharmacies.length > 1 && (
           <Field label="Pharmacy" hint="This email is registered with more than one pharmacy." error={error?.field("pharmacy") && !pharmacy ? error.field("pharmacy") : undefined}>
             {(id) => (
