@@ -139,11 +139,11 @@ export default function DrugFormPage() {
         title={editing ? `Edit ${data?.data.name ?? "drug"}` : "Add drug"}
       />
 
-      <form onSubmit={submit} className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" noValidate>
+      <form onSubmit={submit} className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]" noValidate>
         <div className="space-y-6">
           <Card>
             <CardHeader title="Product" />
-            <CardBody className="grid gap-4 sm:grid-cols-2">
+            <CardBody className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Name" required error={err("name")} className="sm:col-span-2">
                 {(fid) => <Input id={fid} value={form.name} onChange={set("name")} autoFocus={!editing} invalid={!!err("name")} placeholder="e.g. Paracetamol 500mg Tablets" />}
               </Field>
@@ -186,7 +186,7 @@ export default function DrugFormPage() {
           {!editing && (
             <Card>
               <CardHeader title="Opening stock" description="Optional. You can also add batches later, or receive them on a purchase order." />
-              <CardBody className="grid gap-4 sm:grid-cols-3">
+              <CardBody className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <Field label="Batch number" error={err("opening_batch.batch_number")}>
                   {(fid) => <Input id={fid} value={form.batch_number} onChange={set("batch_number")} className="font-mono" />}
                 </Field>

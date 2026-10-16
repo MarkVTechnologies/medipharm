@@ -56,7 +56,7 @@ export default function Register() {
         <Field label="Pharmacy name" required error={err("pharmacy_name")}>
           {(id) => <Input id={id} autoFocus value={form.pharmacy_name} onChange={set("pharmacy_name")} invalid={!!err("pharmacy_name")} placeholder="e.g. HealthPlus Pharmacy, Yaba" />}
         </Field>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Pharmacy phone" error={err("phone")}>
             {(id) => <Input id={id} type="tel" value={form.phone} onChange={set("phone")} placeholder="0803 000 0000" />}
           </Field>
@@ -70,7 +70,7 @@ export default function Register() {
         <Field label="Email" required error={err("email")}>
           {(id) => <Input id={id} type="email" autoComplete="email" value={form.email} onChange={set("email")} invalid={!!err("email")} />}
         </Field>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Password" required error={err("password")} hint="At least 8 characters">
             {(id) => <Input id={id} type="password" autoComplete="new-password" value={form.password} onChange={set("password")} invalid={!!err("password")} />}
           </Field>

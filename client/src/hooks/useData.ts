@@ -92,16 +92,18 @@ export function useBilling(enabled: boolean) {
   return useSWR<{ data: BillingData }>(enabled ? "/api/billing/subscription" : null, fetcher);
 }
 
-/** Revalidate every cached key whose URL starts with one of the prefixes. */
+export const INVALIDATE_EVENT = "medipharm:invalidate";
+
+/**
+ * Refetch every cached response whose URL starts with one of the prefixes.
+ * Cached data is kept on screen while refetching (no blank flash).
+ * SWR's filter-mutate skips infinite-list keys, so those lists listen for
+ * INVALIDATE_EVENT instead (see useInfiniteList).
+ */
 export function useInvalidate() {
   const { mutate } = useSWRConfig();
-  return (...prefixes: string[]) =>
-    mutate(
-      (key) => {
-        const k = Array.isArray(key) ? String(key[0]) : typeof key === "string" ? key : String(key ?? "");
-        return prefixes.some((p) => k.startsWith(p) || k.includes(`"${p}`) || k.startsWith(`$inf$${p}`));
-      },
-      undefined,
-      { revalidate: true },
-    );
+  return (...prefixes: string[]) => {
+    window.dispatchEvent(new CustomEvent(INVALIDATE_EVENT, { detail: prefixes }));
+    return mutate((key) => typeof key === "string" && prefixes.some((p) => key.startsWith(p)));
+  };
 }

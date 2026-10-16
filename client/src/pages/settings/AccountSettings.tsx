@@ -34,7 +34,7 @@ export function AccountSettings() {
       <Card>
         <CardHeader title="My account" />
         <CardBody>
-          <form onSubmit={(e) => { e.preventDefault(); void submit("profile", { name, email }); }} className="grid gap-4 sm:grid-cols-2">
+          <form onSubmit={(e) => { e.preventDefault(); void submit("profile", { name, email }); }} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field label="Name" error={error?.field("name")}>{(id) => <Input id={id} value={name} onChange={(e) => setName(e.target.value)} />}</Field>
             <Field label="Email" error={error?.field("email")}>{(id) => <Input id={id} type="email" value={email} onChange={(e) => setEmail(e.target.value)} />}</Field>
             <div className="sm:col-span-2 flex justify-end">
@@ -46,7 +46,7 @@ export function AccountSettings() {
       <Card>
         <CardHeader title="Change password" />
         <CardBody>
-          <form onSubmit={(e) => { e.preventDefault(); void submit("password", pw); }} className="grid gap-4 sm:grid-cols-3">
+          <form onSubmit={(e) => { e.preventDefault(); void submit("password", pw); }} className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field label="Current password" error={error?.field("current_password")}>
               {(id) => <Input id={id} type="password" autoComplete="current-password" value={pw.current_password} onChange={(e) => setPw({ ...pw, current_password: e.target.value })} />}
             </Field>

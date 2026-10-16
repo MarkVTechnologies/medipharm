@@ -61,7 +61,7 @@ export function ProfileSettings() {
     <form onSubmit={save} className="space-y-6">
       <Card>
         <CardHeader title="Pharmacy profile" description="Shown on every receipt." />
-        <CardBody className="grid gap-4 sm:grid-cols-2">
+        <CardBody className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">{input("name", "Pharmacy name")}</div>
           <div className="sm:col-span-2">{input("address", "Address")}</div>
           {input("phone", "Phone")}
@@ -71,7 +71,7 @@ export function ProfileSettings() {
             {(id) => (
               <div className="flex items-center gap-3">
                 {tenant.logo_url && <img src={tenant.logo_url} alt="" className="size-10 rounded-md object-cover ring-1 ring-border" />}
-                <input id={id} type="file" accept="image/*" disabled={readOnly} onChange={(e) => setLogo(e.target.files?.[0] ?? null)} className="text-base file:mr-3 file:h-9 file:rounded-md file:border file:border-border file:bg-canvas file:px-3 file:text-base file:font-medium" />
+                <input id={id} type="file" accept="image/*" disabled={readOnly} onChange={(e) => setLogo(e.target.files?.[0] ?? null)} className="min-w-0 flex-1 text-base file:mr-3 file:h-9 file:rounded-md file:border file:border-border file:bg-canvas file:px-3 file:text-base file:font-medium" />
               </div>
             )}
           </Field>
@@ -83,7 +83,7 @@ export function ProfileSettings() {
 
       <Card>
         <CardHeader title="Tax & currency" />
-        <CardBody className="grid gap-4 sm:grid-cols-2">
+        <CardBody className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Field label="Standard VAT rate (%)" error={error?.field("vat_rate")} hint="Nigeria: 7.5%. Individual items can be exempt.">
             {(id) => <Input id={id} type="number" step="0.01" min={0} max={100} value={f.vat_rate} onChange={(e) => setF({ ...f, vat_rate: e.target.value })} disabled={readOnly} />}
           </Field>

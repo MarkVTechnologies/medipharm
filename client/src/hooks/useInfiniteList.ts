@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import { fetcher, qs, type Paginated } from "../lib/api";
+import { INVALIDATE_EVENT } from "./useData";
 
 type Params = Record<string, string | number | boolean | null | undefined>;
 
@@ -15,6 +17,17 @@ export function useInfiniteList<T>(path: string | null, params: Params = {}, per
   };
 
   const swr = useSWRInfinite<Paginated<T>>(getKey, fetcher, { revalidateFirstPage: true, keepPreviousData: true });
+
+  const { mutate } = swr;
+  useEffect(() => {
+    if (!path) return;
+    const onInvalidate = (e: Event) => {
+      const prefixes = (e as CustomEvent<string[]>).detail ?? [];
+      if (prefixes.some((p) => path.startsWith(p))) void mutate();
+    };
+    window.addEventListener(INVALIDATE_EVENT, onInvalidate);
+    return () => window.removeEventListener(INVALIDATE_EVENT, onInvalidate);
+  }, [path, mutate]);
   const pages = swr.data ?? [];
   const items = pages.flatMap((p) => p.data);
   const last = pages[pages.length - 1];

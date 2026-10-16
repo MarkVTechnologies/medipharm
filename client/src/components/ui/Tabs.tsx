@@ -22,7 +22,7 @@ export function Tabs<T extends string>({
   size?: "sm" | "md";
 }) {
   return (
-    <div role="tablist" className={cn("-mx-1 flex gap-1 overflow-x-auto px-1", className)}>
+    <div role="tablist" className={cn("-mx-1 flex gap-1 overflow-x-auto px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden", className)}>
       {items.map((item) => {
         const active = item.value === value;
         return (

@@ -96,7 +96,7 @@ export default function PurchaseOrderNew() {
         title="New purchase order"
       />
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
         <Card>
           <CardHeader title="Items" />
           <CardBody className="border-b border-border-subtle">

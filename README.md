@@ -19,6 +19,7 @@ cp .env.example .env        # then set APP_ENV=local, APP_URL, DB_*, SESSION_DOM
                             # SANCTUM_STATEFUL_DOMAINS=localhost:5180, FRONTEND_URL=http://localhost:5180
 php artisan key:generate
 php artisan migrate --seed  # demo pharmacy, logins below
+php artisan storage:link    # serves uploaded logos
 php artisan serve --port=8010
 
 # SPA (proxies /api to 127.0.0.1:8010)
@@ -29,7 +30,18 @@ npm run dev -- --port 5180
 
 Demo logins (password `password`): `owner@medipharm.test`, `pharmacist@medipharm.test`, `assistant@medipharm.test`.
 
-Tests: `cd server && php artisan test`
+Tests (SQLite in memory by default):
+
+```bash
+cd server && php artisan test
+```
+
+Also run them against MySQL/MariaDB before a release — some SQL differs between engines and SQLite won't catch it:
+
+```bash
+# once: CREATE DATABASE medipharm_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+DB_CONNECTION=mysql DB_DATABASE=medipharm_test php artisan test
+```
 
 ## Production (cPanel)
 

@@ -108,7 +108,7 @@ export default function DrugDetail() {
         />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Card>
           <CardHeader title="Batches" description="Drawn first-expiry-first-out at the counter" />
           {batches.length === 0 ? (
@@ -227,7 +227,7 @@ function AddBatchModal({ open, drugId, defaultCost, onClose, onDone }: { open: b
 
   return (
     <Modal open={open} onClose={onClose} title="Add batch" description="For stock that didn't come through a purchase order.">
-      <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={submit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <Field label="Batch number" required error={error?.field("batch_number")}>
           {(id) => <Input id={id} value={f.batch_number} onChange={(e) => setF({ ...f, batch_number: e.target.value })} className="font-mono" />}
         </Field>

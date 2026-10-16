@@ -33,8 +33,10 @@ export default function SalesHistory() {
       <PageHeader title="Sales history" description={list.meta ? `${list.total} sale${list.total === 1 ? "" : "s"} in range` : undefined} />
 
       <Card>
-        <div className="grid gap-3 border-b border-border-subtle p-4 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+        <div className="grid grid-cols-2 gap-3 border-b border-border-subtle p-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+          <div className="col-span-2 lg:col-span-1">
           <Input leading={<Search />} placeholder="Reference e.g. SAL-00123" value={search} onChange={(e) => setSearch(e.target.value)} aria-label="Search by reference" />
+          </div>
           <Input type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} aria-label="From" />
           <Input type="date" value={to} min={from} onChange={(e) => setTo(e.target.value)} aria-label="To" />
           <Select value={method} onChange={(e) => setMethod(e.target.value)} aria-label="Payment method">

@@ -32,13 +32,13 @@ export default function Suppliers() {
       {error && !data ? (
         <Card><ErrorState error={error} onRetry={() => void mutate()} /></Card>
       ) : isLoading && !data ? (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 3 }, (_, i) => <Skeleton key={i} className="h-44 rounded-lg" />)}</div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">{Array.from({ length: 3 }, (_, i) => <Skeleton key={i} className="h-44 rounded-lg" />)}</div>
       ) : !data?.data.length ? (
         <Card>
           <EmptyState icon={<Truck />} title={debounced ? "No suppliers match" : "No suppliers yet"} description="Add the wholesalers and manufacturers you order from." action={!debounced && <Button onClick={() => setEditing("new")}>Add supplier</Button>} />
         </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {data.data.map((s) => (
             <Card key={s.id} className="flex flex-col p-5">
               <div className="flex items-start justify-between gap-3">
@@ -113,7 +113,7 @@ function SupplierModal({ supplier, onClose, onSaved }: { supplier: Supplier | "n
 
   return (
     <Modal open={!!supplier} onClose={onClose} title={isNew ? "Add supplier" : "Edit supplier"}>
-      <form onSubmit={submit} className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={submit} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">{field("name", "Company name")}</div>
         {field("contact_person", "Contact person")}
         {field("phone", "Phone", { type: "tel" })}

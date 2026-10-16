@@ -26,7 +26,7 @@ export default function Settings() {
     <>
       <Title>Settings · MediPharm</Title>
       <PageHeader title="Settings" />
-      <div className="grid gap-6 lg:grid-cols-[200px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[200px_minmax(0,1fr)]">
         <nav className="-mx-1 flex gap-1 overflow-x-auto px-1 lg:mx-0 lg:flex-col lg:px-0" aria-label="Settings sections">
           {tabs.map((t) => (
             <NavLink

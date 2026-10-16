@@ -6,6 +6,10 @@ import { cn } from "../../lib/cn";
 
 const ease = [0.2, 0.7, 0.3, 1] as const;
 
+// Open modals, innermost last. Escape closes only the top one, so a confirm
+// dialog stacked over a drawer doesn't take the drawer down with it.
+const openStack: symbol[] = [];
+
 /**
  * Accessible modal: focus moves in on open and returns on close, Escape closes,
  * body scroll locks. 180ms transitions (spec §8.4).
@@ -40,13 +44,15 @@ export function Modal({
 
   useEffect(() => {
     if (!open) return;
+    const id = Symbol("modal");
+    openStack.push(id);
     restoreRef.current = document.activeElement as HTMLElement | null;
     const t = window.setTimeout(() => {
       const target = panelRef.current?.querySelector<HTMLElement>("[data-autofocus], input:not([type=hidden]), select, textarea, button:not([data-close])");
       (target ?? panelRef.current)?.focus();
     }, 30);
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && openStack[openStack.length - 1] === id) {
         e.stopPropagation();
         onCloseRef.current();
       }
@@ -55,6 +61,7 @@ export function Modal({
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
+      openStack.splice(openStack.indexOf(id), 1);
       window.clearTimeout(t);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = overflow;

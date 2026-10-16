@@ -23,6 +23,11 @@ const GROUPS: Record<Kind, { param?: string; options?: [string, string][] }> = {
 };
 
 const MONEY_KEYS = /revenue|cogs|margin|value|spend|vat|discount|sales|collected|subtotal|basket/;
+// Plain counts. Listed explicitly: substring tests misfire ("discount" contains "count").
+const COUNT_KEYS = new Set([
+  "transactions", "items_sold", "units_on_hand", "sku_count", "quantity", "visits", "days_left",
+  "total_customers", "new_customers", "active_customers", "returning_customers",
+]);
 
 const SUMMARY_LABELS: Record<string, string> = {
   transactions: "Transactions", items_sold: "Items sold", subtotal: "Gross sales", discount: "Discounts", vat: "VAT collected",
@@ -55,7 +60,7 @@ export default function Reports() {
     if (value === null || value === undefined || value === "") return "—";
     if (typeof value === "number") {
       if (key.endsWith("percent") || key === "retention_rate") return `${value}%`;
-      return MONEY_KEYS.test(key) && !/count|transactions|items|units|customers/.test(key) ? formatNaira(value) : formatNumber(value);
+      return MONEY_KEYS.test(key) && !COUNT_KEYS.has(key) ? formatNaira(value) : formatNumber(value);
     }
     if (key === "date" && typeof value === "string") return value.length > 10 ? formatDateTime(value) : formatDate(value);
     if (key === "last_sold" || key === "expiry_date") return formatDate(String(value));
@@ -158,7 +163,7 @@ export default function Reports() {
                   {report.rows.map((row, i) => (
                     <Tr key={i}>
                       {report.columns.map((c) => (
-                        <Td key={c.key} align={typeof row[c.key] === "number" ? "right" : undefined} className={cn(c.key === report.columns[0].key && "font-medium text-fg", c.key === "type" && "capitalize")}>
+                        <Td key={c.key} align={typeof row[c.key] === "number" ? "right" : undefined} className={cn(c.key === report.columns[0].key && "font-medium text-fg", (c.key === "type" || c.key === "tier" || c.key === "payment_method") && "capitalize")}>
                           {fmt(c.key, row[c.key])}
                         </Td>
                       ))}

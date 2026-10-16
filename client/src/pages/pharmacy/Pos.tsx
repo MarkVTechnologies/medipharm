@@ -212,7 +212,7 @@ export default function Pos() {
                 icon={<ScanLine />}
                 title="Scan or type to add items"
                 description={
-                  <span className="inline-flex flex-wrap justify-center gap-x-4 gap-y-1">
+                  <span className="hidden flex-wrap justify-center gap-x-4 gap-y-1 sm:inline-flex">
                     <span><Kbd>↑</Kbd><Kbd>↓</Kbd> choose</span>
                     <span><Kbd>Enter</Kbd> add</span>
                     <span><Kbd>F9</Kbd> charge</span>

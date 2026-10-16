@@ -81,7 +81,7 @@ export function StatCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-sm font-medium text-fg-3">{label}</p>
-          <p className="tabular mt-1.5 truncate text-2xl font-semibold tracking-tight text-fg">{value}</p>
+          <p className="tabular mt-1.5 text-xl font-semibold tracking-tight break-words text-fg sm:text-2xl">{value}</p>
         </div>
         {icon && <span className={cn("flex size-9 shrink-0 items-center justify-center rounded-md [&_svg]:size-[18px]", tones[tone])}>{icon}</span>}
       </div>
