@@ -23,6 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Sanctum stateful SPA cookie mode (spec §4.4).
         $middleware->statefulApi();
 
+        // Behind a reverse proxy (hosted staging, Cloudflare): trust its
+        // X-Forwarded-* headers so HTTPS and client IPs are seen correctly.
+        $middleware->trustProxies(at: env('TRUSTED_PROXIES', '127.0.0.1'));
+
         $middleware->alias([
             'tenant' => SetTenantContext::class,
             'role' => EnsureRole::class,

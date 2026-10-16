@@ -43,6 +43,16 @@ Also run them against MySQL/MariaDB before a release — some SQL differs betwee
 DB_CONNECTION=mysql DB_DATABASE=medipharm_test php artisan test
 ```
 
+## Temporary demo (Render + Aiven, free tiers)
+
+A single container (`deploy/render/Dockerfile`) serves the built SPA and the API from one address; `render.yaml` describes it. Production still targets cPanel (below).
+
+1. **Aiven** (aiven.io): create a free **MySQL** service, ideally in a European region. From its *Connection information* note the host, port and user/password, and download the **CA certificate**.
+2. **Render** (render.com): sign in with GitHub → **New → Blueprint** → pick this repository. When prompted, enter `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, and paste the whole CA certificate into `DB_SSL_CA`.
+3. Deploy. On first start the container migrates the database and loads the demo pharmacy (`SEED_DEMO=true`; skipped once present). Sign in with the demo logins above.
+
+Free-tier notes: the service sleeps after ~15 minutes idle (the next visit takes about a minute to wake), uploaded logos are lost on restart, and email is written to the logs rather than sent.
+
 ## Production (cPanel)
 
 - API: `server/` lives outside `public_html`; point an `api.` subdomain's document root at `server/public`. Set `.env` from `.env.example`, run `php artisan migrate --force` and the config/route/view caches.

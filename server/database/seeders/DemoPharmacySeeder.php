@@ -25,6 +25,13 @@ class DemoPharmacySeeder extends Seeder
 {
     public function run(): void
     {
+        // Idempotent: hosted demos run this on every container start.
+        if (Tenant::query()->where('slug', 'healthplus-yaba')->exists()) {
+            $this->command?->info('Demo pharmacy already present; skipping.');
+
+            return;
+        }
+
         $tenant = Tenant::create([
             'name' => 'HealthPlus Pharmacy, Yaba',
             'slug' => 'healthplus-yaba',

@@ -1,0 +1,67 @@
+# Render Blueprint — temporary MediPharm demo (single free web service).
+# Database: a free Aiven MySQL instance; you'll be asked for its details
+# when you create the Blueprint (fields marked sync: false).
+# Production still targets cPanel shared hosting — see README.
+services:
+  - type: web
+    name: medipharm-demo
+    runtime: docker
+    plan: free
+    region: frankfurt # closest Render region to Lagos
+    dockerfilePath: ./deploy/render/Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    autoDeployTrigger: commit
+    envVars:
+      - key: APP_NAME
+        value: MediPharm
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_TIMEZONE
+        value: UTC
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: info
+
+      # Aiven MySQL — copy these from the Aiven service's "Connection information".
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_DATABASE
+        value: defaultdb
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSL_CA # paste the full contents of Aiven's CA certificate (ca.pem)
+        sync: false
+
+      - key: SESSION_DRIVER
+        value: database
+      - key: SESSION_LIFETIME
+        value: "600"
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: SESSION_DOMAIN
+        value: "null"
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: MAIL_MAILER
+        value: log
+      - key: MAIL_FROM_ADDRESS
+        value: noreply@medipharm.test
+      - key: TRUSTED_PROXIES
+        value: "*"
+      # Loads the demo pharmacy on first start (skipped once present).
+      - key: SEED_DEMO
+        value: "true"
